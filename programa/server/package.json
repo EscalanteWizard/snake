@@ -2,6 +2,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "socket.io": "^4.7.2"
+    "kill-port": "^2.0.1",
+    "socket.io": "^4.7.2",
+    "ws": "^8.14.2"
   }
 }

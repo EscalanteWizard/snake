@@ -5,32 +5,11 @@ const FOOD_COLOUR = 'red';
 const socket = io('*', { withCredentials: true });
 
 socket.on('init',handleInit);
+socket.on('gameState',handleGameState);
+socket.on('gameOver',handleGameOver);
 
 const gameScreen = document.getElementById('gameScreen');
 let canvas, ctx;
-
-const gameState = {
-    player: {
-        pos: {
-            x:3,
-            y:10,
-        },
-        vel: {
-            x:1,
-            y: 0,
-        },
-        snake: [
-            {x: 1, y: 10},
-            {x: 2, y: 10},
-            {x: 3, y: 10},
-        ],
-    },
-    food: {
-        x: 7,
-        y: 7,
-    },
-    gridsize:20,
-};
 
 function init(){
     canvas = document.getElementById('canvas');
@@ -47,6 +26,7 @@ function init(){
 
 function keydown(e){
     console.log(e.keyCode);
+    socket.emit('keydown',e.keyCode);
 }
 
 init();
@@ -74,8 +54,17 @@ function paintPlayer(playerState,size,colour){
     }
 }
 
-paintGame(gameState);
+paintGame(gametate);
 
 function handleInit(msg){
     console.log(msg);
 };
+
+function handleGameState(gameState){
+    gameState = JSON.parse(gameState);
+    requestAnimationFrame(() => paintGame(gameState));
+};
+
+function handleGameOver(){
+    alert("You lose!!");
+}
