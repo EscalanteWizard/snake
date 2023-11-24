@@ -6,8 +6,12 @@ const path = require('path');
 const { createGameState,gameLoop,getUpdatedVelocity} = require('./game');
 const { FRAME_RATE } = require('./constants');
 
+const state= {};
+const clientRooms={};
+
 const app = express();
 const server = http.createServer(app);
+
 const io = socketIO(server, {
   cors: {
     origin: "*", // o el origen correcto de tu cliente
@@ -23,15 +27,28 @@ app.use(cors({ credentials: true }));
 
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', 'default-src \'self\'');
-  res.header('Access-Control-Allow-Origin', '*');
+  //res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'localhost');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
 io.on('connection', client => {
-  const state=createGameState();
 
   client.on('keydown',handleKeydown);
+  client.on('newGame',handleNewGame);
+  
+  function handleNewGame(){
+    let roomName=makeid(5);
+    clientRooms[client.id]=roomName;
+    client.emit('gameCode'.roomName);
+
+    state[roomName]=initGame();
+    client.join(roomName);
+    client.number=1;
+    client.emit('init',1);
+
+  }
 
   function handleKeydown(keyCode){
     try{
