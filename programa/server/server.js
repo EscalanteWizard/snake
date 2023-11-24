@@ -14,7 +14,7 @@ app.use(cors());
 // Middleware para agregar el encabezado Content-Security-Policy
 
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', '*');
+  res.setHeader('Content-Security-Policy', 'default-src *');
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
