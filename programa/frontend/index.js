@@ -2,7 +2,7 @@ const BG_COLOUR = 'black';
 const SNAKE_COLOUR = 'white';
 const FOOD_COLOUR = 'red';
 
-const socket = io('http://localhost:3000', { withCredentials: true });
+const socket = io('*', { withCredentials: true });
 
 socket.on('init',handleInit);
 
