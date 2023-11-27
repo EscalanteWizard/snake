@@ -28,6 +28,7 @@ function createGameState() {
         {x: 2, y: 10},
         {x: 3, y: 10},
       ],
+      points: 0,
     }, {
       pos: {
         x: 18,
@@ -42,6 +43,7 @@ function createGameState() {
         {x: 19, y: 10},
         {x: 18, y: 10},
       ],
+      points: 0,
     }],
     food: {},
     gridsize: GRID_SIZE,
@@ -72,6 +74,7 @@ function gameLoop(state) {
 
   if (state.food.x === playerOne.pos.x && state.food.y === playerOne.pos.y) {
     playerOne.snake.push({ ...playerOne.pos });
+    playerOne.points += 1;
     playerOne.pos.x += playerOne.vel.x;
     playerOne.pos.y += playerOne.vel.y;
     randomFood(state);
@@ -79,6 +82,7 @@ function gameLoop(state) {
 
   if (state.food.x === playerTwo.pos.x && state.food.y === playerTwo.pos.y) {
     playerTwo.snake.push({ ...playerTwo.pos });
+    playerTwo.points += 1;
     playerTwo.pos.x += playerTwo.vel.x;
     playerTwo.pos.y += playerTwo.vel.y;
     randomFood(state);

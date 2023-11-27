@@ -35,6 +35,7 @@ function joinGame() {
 
 let canvas, ctx;
 let playerNumber;
+let playersPoints=[];
 let gameActive = false;
 
 function init() {
