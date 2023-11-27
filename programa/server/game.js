@@ -1,17 +1,32 @@
 const { GRID_SIZE } = require('./constants');
-
+/**
+ * Seccion de exportacion de los modulos necesarios para la ejecucion del juego
+ * @param 
+ * @returns las funciones necesarias para la ejecucion del juego
+ * @restrictions 
+ */
 module.exports = {
   initGame,
   gameLoop,
   getUpdatedVelocity,
 }
-
+/**
+ * Inicia el juego
+ * @param ninguno
+ * @returns dispara el llamado a las funciones necesarias para que se inicialice la partida
+ * @restrictions ninguna
+ */
 function initGame() {
   const state = createGameState()
   randomFood(state);
   return state;
 }
-
+/**
+ * Crea el estado inicial del juego
+ * @param ninguno
+ * @returns retorna un estao "semilla" del tablero de juego
+ * @restrictions ninguna
+ */
 function createGameState() {
   return {
     players: [{
@@ -49,7 +64,12 @@ function createGameState() {
     gridsize: GRID_SIZE,
   };
 }
-
+/**
+ * Administra el estado del tablero y realiza las validaciones y modificaciones necesarias para que el juego se ejecute
+ * @param estado actual del juego
+ * @returns permite que se realicen las interacciones que modifican el estado del juego en cada momento
+ * @restrictions no pueden existir dos elementos distintos en el mismo punto del tablero
+ */
 function gameLoop(state) {
   if (!state) {
     return;
@@ -112,7 +132,12 @@ function gameLoop(state) {
 
   return false;
 }
-
+/**
+ * Ubica un punto de "comida" en una ubicacion random del tablero
+ * @param el estado actual del tablero
+ * @returns ubica un punto de comida en una ubicacion del tablero
+ * @restrictions el punto de comida no puede aparecer en una casilla ocupada por un jugador
+ */
 function randomFood(state) {
   food = {
     x: Math.floor(Math.random() * GRID_SIZE),
@@ -133,7 +158,12 @@ function randomFood(state) {
 
   state.food = food;
 }
-
+/**
+ * Funcion para modificar el movimiento de la serpiente del jugador
+ * @param el codigo de la tecla precionada por el jugador 
+ * @returns modifica el movimiento de la serpiente según la tecla precionada por el jugador
+ * @restrictions el codigo recibido debe ser el de una tecla de direcciones
+ */
 function getUpdatedVelocity(keyCode) {
   switch (keyCode) {
     case 37: { // left
