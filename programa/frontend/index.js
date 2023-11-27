@@ -8,7 +8,10 @@ const FOOD_COLOUR = '#e66916';
 * @returns pone la aplicacion frontend en escucha
 * @restrictions debe existir el servicio de hosting
 */
-const socket = io('https://sleepy-island-33889.herokuapp.com/');
+
+const socket = io('http://localhost:3000', { withCredentials: true });
+
+socket.on('init',handleInit);
 
 socket.on('init', handleInit);
 socket.on('gameState', handleGameState);
