@@ -63,13 +63,13 @@ function createGameState(gameMode,largoSerpiente,segundos) {
     }],
     food: {},
     gridsize: GRID_SIZE,
-    gameTime: segundos,
+    gameTime: segundos * 20,
     maxSnake:largoSerpiente,
   };
 }
 function getWinnerByPoints(state){
-  if(state.playerOne.snakeLength >= state.maxSnake){return 2;}
-  else{return 1;}
+  if(state.players[0].snakeLength >= state.maxSnake){return 1;}
+  else{return 2;}
 }
 /**
  * Administra el estado del tablero y realiza las validaciones y modificaciones necesarias para que el juego se ejecute
@@ -87,16 +87,16 @@ function gameLoop(state) {
 
   if (state.gameMode === 'time') {
     state.gameTime--;
-    if (state.gameTime =0) {
+    if (state.gameTime < 0) {
       return getWinnerByPoints(state);  
     }
   }
 
   if (state.gameMode === 'length') {
-    if (playerOne.snakeLength >= state.maxSnake) {
+    if (playerOne.snakeLength > state.maxSnake) {
       return 1;
     }
-    if (playerTwo.snakeLength >= state.maxSnake) {
+    if (playerTwo.snakeLength > state.maxSnake) {
       return 2;
     }
   }
@@ -114,7 +114,7 @@ function gameLoop(state) {
 
   if (playerTwo.pos.x < 0 || playerTwo.pos.x > GRID_SIZE || playerTwo.pos.y < 0 || playerTwo.pos.y > GRID_SIZE) {
     playerTwo.snakeLength -=1;
-    playerTwo.snake.pop({ ...playerTwo.pos});
+    playerTwo.snake.pop({ ...playerOne.pos});
   }
 
   if (state.food.x === playerOne.pos.x && state.food.y === playerOne.pos.y) {
@@ -157,6 +157,7 @@ function gameLoop(state) {
 
   return false;
 }
+
 /**
  * Ubica un punto de "comida" en una ubicacion random del tablero
  * @param el estado actual del tablero
