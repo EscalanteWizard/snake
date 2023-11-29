@@ -15,6 +15,7 @@ io.on('connection', client => {
 
   client.on('keydown', handleKeydown);
   client.on('newGame', handleNewGame);
+  client.on('newTimeGame', handleNewTimeGame);
   client.on('joinGame', handleJoinGame);
 
   function handleJoinGame(roomName) {
@@ -52,12 +53,27 @@ io.on('connection', client => {
   * @returns crea un identificador de juego, crea la sala de juego y permite a los jugadores que lo deseen unirse
   * @restrictions el juego iniciado debe tener un codigo valido
   */
-  function handleNewGame() {
+  function handleNewTimeGame(tiempoSegundos) {
     let roomName = makeid(5);
+
     clientRooms[client.id] = roomName;
     client.emit('gameCode', roomName);
 
-    state[roomName] = initGame();
+    state[roomName] = initGame('time',0,tiempoSegundos);
+
+    client.join(roomName);
+    client.number = 1;
+    client.emit('init', 1);
+  }
+
+
+  function handleNewGame(largoSerpiente) {
+    let roomName = makeid(5);
+
+    clientRooms[client.id] = roomName;
+    client.emit('gameCode', roomName);
+
+    state[roomName] = initGame('length',largoSerpiente,0);
 
     client.join(roomName);
     client.number = 1;
@@ -105,7 +121,7 @@ function startGameInterval(roomName) {
       state[roomName] = null;
       clearInterval(intervalId);
     }
-  }, 1000 / FRAME_RATE);
+  }, 800 / FRAME_RATE);
 }
 /**
 * envia a los jugadores el codigo de la partida creada

@@ -16,8 +16,8 @@ module.exports = {
  * @returns dispara el llamado a las funciones necesarias para que se inicialice la partida
  * @restrictions ninguna
  */
-function initGame() {
-  const state = createGameState()
+function initGame(gameMode,largoSerpiente,segundos) {
+  const state = createGameState(gameMode,largoSerpiente,segundos);
   randomFood(state);
   return state;
 }
@@ -27,8 +27,9 @@ function initGame() {
  * @returns retorna un estao "semilla" del tablero de juego
  * @restrictions ninguna
  */
-function createGameState() {
+function createGameState(gameMode,largoSerpiente,segundos) {
   return {
+    gameMode: gameMode,
     players: [{
       pos: {
         x: 3,
@@ -43,7 +44,7 @@ function createGameState() {
         {x: 2, y: 10},
         {x: 3, y: 10},
       ],
-      points: 0,
+      snakeLength: 3,
     }, {
       pos: {
         x: 18,
@@ -58,11 +59,17 @@ function createGameState() {
         {x: 19, y: 10},
         {x: 18, y: 10},
       ],
-      points: 0,
+      snakeLength: 3,
     }],
     food: {},
     gridsize: GRID_SIZE,
+    gameTime: segundos,
+    maxSnake:largoSerpiente,
   };
+}
+function getWinnerByPoints(state){
+  if(state.playerOne.snakeLength >= state.maxSnake){return 2;}
+  else{return 1;}
 }
 /**
  * Administra el estado del tablero y realiza las validaciones y modificaciones necesarias para que el juego se ejecute
@@ -78,6 +85,22 @@ function gameLoop(state) {
   const playerOne = state.players[0];
   const playerTwo = state.players[1];
 
+  if (state.gameMode === 'time') {
+    state.gameTime--;
+    if (state.gameTime =0) {
+      return getWinnerByPoints(state);  
+    }
+  }
+
+  if (state.gameMode === 'length') {
+    if (playerOne.snakeLength >= state.maxSnake) {
+      return 1;
+    }
+    if (playerTwo.snakeLength >= state.maxSnake) {
+      return 2;
+    }
+  }
+
   playerOne.pos.x += playerOne.vel.x;
   playerOne.pos.y += playerOne.vel.y;
 
@@ -85,16 +108,18 @@ function gameLoop(state) {
   playerTwo.pos.y += playerTwo.vel.y;
 
   if (playerOne.pos.x < 0 || playerOne.pos.x > GRID_SIZE || playerOne.pos.y < 0 || playerOne.pos.y > GRID_SIZE) {
-    return 2;
+    playerOne.snakeLength -=1;
+    playerOne.snake.pop({ ...playerOne.pos});
   }
 
   if (playerTwo.pos.x < 0 || playerTwo.pos.x > GRID_SIZE || playerTwo.pos.y < 0 || playerTwo.pos.y > GRID_SIZE) {
-    return 1;
+    playerTwo.snakeLength -=1;
+    playerTwo.snake.pop({ ...playerTwo.pos});
   }
 
   if (state.food.x === playerOne.pos.x && state.food.y === playerOne.pos.y) {
     playerOne.snake.push({ ...playerOne.pos });
-    playerOne.points += 1;
+    playerOne.snakeLength += 1;
     playerOne.pos.x += playerOne.vel.x;
     playerOne.pos.y += playerOne.vel.y;
     randomFood(state);
@@ -102,7 +127,7 @@ function gameLoop(state) {
 
   if (state.food.x === playerTwo.pos.x && state.food.y === playerTwo.pos.y) {
     playerTwo.snake.push({ ...playerTwo.pos });
-    playerTwo.points += 1;
+    playerTwo.snakeLength += 1;
     playerTwo.pos.x += playerTwo.vel.x;
     playerTwo.pos.y += playerTwo.vel.y;
     randomFood(state);

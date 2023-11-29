@@ -23,11 +23,15 @@ socket.on('tooManyPlayers', handleTooManyPlayers);
 const gameScreen = document.getElementById('gameScreen');
 const initialScreen = document.getElementById('initialScreen');
 const newGameBtn = document.getElementById('newGameButton');
+const newTimeGameBtn = document.getElementById('newTimeGameButton');
 const joinGameBtn = document.getElementById('joinGameButton');
 const gameCodeInput = document.getElementById('gameCodeInput');
 const gameCodeDisplay = document.getElementById('gameCodeDisplay');
+const lengthInput = document.getElementById('snakeLengthInput');
+const timeInput = document.getElementById('secondsInput');
 
 newGameBtn.addEventListener('click', newGame);
+newTimeGameBtn.addEventListener('click', newTimeGame);
 joinGameBtn.addEventListener('click', joinGame);
 
 /**
@@ -37,7 +41,21 @@ joinGameBtn.addEventListener('click', joinGame);
 * @restrictions ninguna
 */
 function newGame() {
-  socket.emit('newGame');
+  const length = parseInt(lengthInput.value);
+  if (!length){length=6}
+  socket.emit('newGame',length);
+  init();
+}
+/**
+* Envía al servidor el mensaje de que debe nicializar el juego
+* @param ninguno
+* @returns llama a la funcion de inicio de juego
+* @restrictions ninguna
+*/
+function newTimeGame() {
+  const tiempo = parseInt(timeInput.value);
+  if(!tiempo){tiempo=60}
+  socket.emit('newTimeGame',tiempo);
   init();
 }
 /**

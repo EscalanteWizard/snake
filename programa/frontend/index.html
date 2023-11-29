@@ -15,16 +15,37 @@
   <section class="vh-100">
     <div class="container h-100">
 
+      <!--Elementos del area de creacion de juego-->
       <div id="initialScreen" class="h-100">
         <div class="d-flex flex-column align-items-center justify-content-center h-100">
             <h1>Multiplayer Snake</h1>
+            
+            <!--Elementos para crear un nuevo juego de largo maximo-->
             <button
               type="submit"
               class="btn btn-success"
               id="newGameButton"
             >
-              Create New Game
+              Nuevo Juego de largo
             </button>
+            <div>Largo maximo</div>
+            <div class="form-group">
+              <input type="text" placeholder="Largo de la serpiente" id="snakeLengthInput"/>
+            </div>
+            <!--Elementos para crear un nuevo juego de tiempo-->
+            <button
+              type="submit"
+              class="btn btn-success"
+              id="newTimeGameButton"
+            >
+              Nuevo Juego de tiempo
+            </button>
+            <div>Segundos maximos</div>
+            <div class="form-group">
+              <input type="text" placeholder="Cantidad de segundos" id="secondsInput"/>
+            </div>
+
+            <!--Elementos para unirse a un juego ya creado por medio del codigo de partida-->
             <div>OR</div>
             <div class="form-group">
               <input type="text" placeholder="Enter Game Code" id="gameCodeInput"/>
@@ -38,7 +59,8 @@
             </button>
         </div>
       </div>
-
+      
+      <!-- Elementos del area de juego-->
       <div id="gameScreen" class="h-100">
         <div class="d-flex flex-column align-items-center justify-content-center h-100">
 
